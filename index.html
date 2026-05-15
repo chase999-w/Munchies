@@ -1,89 +1,623 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chase's Profile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munchies — Better Food for Schools</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+  html, body { height: 100%; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #FFF8EC;
+    color: #1F2A1D;
+  }
+  .font-display { font-family: 'Fraunces', serif; }
+  .app-wrapper { width: 100%; min-height: 100%; overflow-x: hidden; }
 
-        header {
-            background-color: lightblue;
-            text-align: center;
-            padding: 20px;
-        }
+  /* Background texture */
+  .hero-bg {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255, 183, 77, 0.25) 0, transparent 35%),
+      radial-gradient(circle at 85% 80%, rgba(122, 184, 93, 0.2) 0, transparent 40%),
+      #FFF8EC;
+  }
 
-        section {
-            padding: 20px;
-            margin: 10px 0;
-        }
+  .dot-pattern {
+    background-image: radial-gradient(rgba(31, 42, 29, 0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
 
-        img {
-            width: 200px;
-            max-width: 100%;
-            border-radius: 8px;
-            display: block;
-            margin-top: 10px;
-        }
+  /* Bouncing food */
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-14px) rotate(var(--r, 0deg)); }
+  }
+  .floaty { animation: floaty 5s ease-in-out infinite; }
 
-        .highlight {
-            color: red;
-            font-weight: bold;
-            background-color: yellow;
-            padding: 2px 4px;
-        }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spin-slow { animation: spin-slow 30s linear infinite; }
 
-        .card {
-            border: 2px solid #333;
-            padding: 15px;
-            margin: 10px 0;
-            background-color: white;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-<body>
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { animation: reveal 0.8s ease-out both; }
 
-    <header>
-        <h1>Chase</h1>
-        <p>Welcome to my page!</p>
-    </header>
+  .ticker {
+    animation: ticker 25s linear infinite;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 
-    <section style="background-color: lightpink;">
-        <h2>About Me</h2>
-        <p>I'm <span class="highlight">Chase</span>, a 9th grader from New York. 
-        I like basketball and video games. My dream is to make it to the NBA.</p>
+  .btn-primary {
+    background: var(--primary, #E8572E);
+    color: #FFF8EC;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 0 rgba(0,0,0,0.2); }
+  .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
 
-        <p>I enjoy making beats and get really <span class="highlight">focused</span> when I'm creating music.</p>
+  .card-tilt { transition: transform 0.3s ease; }
+  .card-tilt:hover { transform: translateY(-6px) rotate(-1deg); }
 
-        
-        <img src="/mnt/data/809e2916-ea97-4f2f-b6c7-0c6f38c73b99.png" alt="Profile Image">
-    </section>
-
-    <section style="background-color: lightgray;">
-        <h2>My Favorites</h2>
-
-        <div class="card">
-            <h3>Favorite Food</h3>
-            <p>Seafood</p>
+  .squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0 5 Q 12.5 0, 25 5 T 50 5 T 75 5 T 100 5' stroke='%23E8572E' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 80px 10px;
+    height: 10px;
+  }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper"><!-- NAV -->
+   <header class="sticky top-0 z-50 backdrop-blur-md bg-[#FFF8EC]/80 border-b border-[#1F2A1D]/10">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"><a href="#home" class="flex items-center gap-3"> <!-- LOGO -->
+      <svg viewbox="0 0 60 60" class="w-11 h-11" aria-label="Munchies logo"><defs>
+        <clippath id="biteClip">
+         <path d="M0 0 H60 V60 H0 Z M48 14 A8 8 0 0 1 48 30 A8 8 0 0 1 48 14 Z" />
+        </clippath>
+        <radialgradient id="earthGrad" cx="30%" cy="30%">
+         <stop offset="0%" stop-color="#6FC0E8" />
+         <stop offset="100%" stop-color="#2A7BB5" />
+        </radialgradient>
+       </defs> <g clip-path="url(#biteClip)"><!-- M shape with earth fill -->
+        <path d="M8 50 V14 C8 11 10 9 13 9 H16 L30 28 L44 9 H47 C50 9 52 11 52 14 V50 H44 V22 L32 38 H28 L16 22 V50 Z" fill="url(#earthGrad)" stroke="#1F2A1D" stroke-width="1.5" stroke-linejoin="round" /> <!-- Continents on the M -->
+        <path d="M12 20 Q16 18 18 22 Q16 26 13 24 Z" fill="#7AB85D" />
+        <path d="M20 35 Q24 33 26 37 L22 42 Q19 40 20 35 Z" fill="#7AB85D" />
+        <path d="M36 18 Q40 16 44 20 Q42 24 38 23 Z" fill="#7AB85D" />
+        <path d="M45 35 Q48 33 49 38 Q47 42 44 40 Z" fill="#7AB85D" />
+        <path d="M12 42 Q16 40 20 44 L17 47 Q13 46 12 42 Z" fill="#7AB85D" />
+        <path d="M36 40 Q40 38 43 43 Q40 46 37 45 Z" fill="#7AB85D" />
+       </g> <!-- Bite mark circle with teeth --> <g>
+        <circle cx="54" cy="22" r="10" fill="#FFF8EC" />
+        <path d="M46 18 L48 22 L44 24 L48 27 L45 30" stroke="#1F2A1D" stroke-width="1.2" fill="none" stroke-linecap="round" />
+       </g>
+      </svg>
+      <div class="leading-tight">
+       <div id="brand-name" class="font-display font-900 text-2xl text-[#1F2A1D] tracking-tight">
+        Munchies
+       </div>
+       <div id="tagline-nav" class="text-[10px] uppercase tracking-widest text-[#E8572E] font-bold">
+        Fresh. Real. Fuel.
+       </div>
+      </div></a>
+     <div class="hidden md:flex items-center gap-8 text-sm font-medium"><a href="#mission" class="hover:text-[#E8572E] transition">Mission</a> <a href="#menu" class="hover:text-[#E8572E] transition">Menu</a> <a href="#how" class="hover:text-[#E8572E] transition">How It Works</a> <a href="#contact" class="hover:text-[#E8572E] transition">Partner With Us</a>
+     </div><a href="#contact" class="btn-primary px-5 py-2.5 rounded-full text-sm font-bold">Get Started</a>
+    </nav>
+   </header>
+   <main><!-- HERO -->
+    <section id="home" class="hero-bg relative overflow-hidden">
+     <div class="absolute inset-0 dot-pattern opacity-60"></div><!-- Floating food emojis -->
+     <div class="absolute top-24 left-[8%] text-5xl floaty" style="--r: -10deg; animation-delay: 0s;">
+      🍎
+     </div>
+     <div class="absolute top-40 right-[10%] text-6xl floaty" style="--r: 12deg; animation-delay: 1.2s;">
+      🥦
+     </div>
+     <div class="absolute bottom-32 left-[12%] text-5xl floaty" style="--r: 8deg; animation-delay: 2s;">
+      🥕
+     </div>
+     <div class="absolute bottom-20 right-[15%] text-5xl floaty" style="--r: -8deg; animation-delay: 0.5s;">
+      🍓
+     </div>
+     <div class="relative max-w-7xl mx-auto px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+       <div class="inline-flex items-center gap-2 bg-[#1F2A1D] text-[#FFF8EC] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Serving 1,200+ schools nationwide
+       </div>
+       <h1 id="hero-title" class="font-display font-900 text-5xl md:text-7xl leading-[0.95] text-[#1F2A1D] mb-6">Lunch that <span class="italic text-[#E8572E]">actually</span> tastes like lunch.</h1>
+       <p id="hero-subtitle" class="text-lg md:text-xl text-[#1F2A1D]/80 mb-8 max-w-lg">We're rebuilding school cafeterias across America with fresh, globally-inspired meals kids line up for and parents trust.</p>
+       <div class="flex flex-wrap gap-4"><a id="cta-button" href="#contact" class="btn-primary px-8 py-4 rounded-full font-bold text-base inline-flex items-center gap-2"> Bring Munchies to Your School <i data-lucide="arrow-right" class="w-5 h-5"></i> </a> <a href="#menu" class="px-8 py-4 rounded-full font-bold text-base border-2 border-[#1F2A1D] text-[#1F2A1D] hover:bg-[#1F2A1D] hover:text-[#FFF8EC] transition"> See the Menu </a>
+       </div>
+       <div class="mt-12 flex items-center gap-8">
+        <div>
+         <div class="font-display font-900 text-4xl text-[#E8572E]">
+          1.2M+
+         </div>
+         <div class="text-xs uppercase tracking-wider font-semibold">
+          Meals served weekly
+         </div>
         </div>
-
-        <div class="card">
-            <h3>Favorite Video Game</h3>
-            <p>NBA 2K26</p>
+        <div class="w-px h-12 bg-[#1F2A1D]/20"></div>
+        <div>
+         <div class="font-display font-900 text-4xl text-[#7AB85D]">
+          46
+         </div>
+         <div class="text-xs uppercase tracking-wider font-semibold">
+          States served
+         </div>
         </div>
-
-        <div class="card">
-            <h3>Favorite Activity</h3>
-            <p>Basketball</p>
+        <div class="w-px h-12 bg-[#1F2A1D]/20 hidden sm:block"></div>
+        <div class="hidden sm:block">
+         <div class="font-display font-900 text-4xl text-[#2A7BB5]">
+          0
+         </div>
+         <div class="text-xs uppercase tracking-wider font-semibold">
+          Artificial junk
+         </div>
         </div>
-    </section>
+       </div>
+      </div><!-- Hero visual: Plate with spinning ring -->
+      <div class="relative reveal" style="animation-delay: 0.3s;">
+       <div class="relative mx-auto w-[360px] h-[360px] md:w-[460px] md:h-[460px]"><!-- Rotating label ring -->
+        <svg viewbox="0 0 200 200" class="absolute inset-0 spin-slow w-full h-full"><defs>
+          <path id="circle" d="M 100,100 m -85,0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" />
+         </defs> <text font-family="Fraunces" font-size="11" font-weight="800" fill="#1F2A1D" letter-spacing="4">
+          <textpath href="#circle">
+           FRESH • LOCAL • TASTY • REAL FOOD • FRESH • LOCAL • TASTY • REAL FOOD •
+          </textpath>
+         </text>
+        </svg><!-- Plate -->
+        <div class="absolute inset-10 rounded-full bg-gradient-to-br from-[#FFE9B8] to-[#FFCA6B] shadow-2xl"></div>
+        <div class="absolute inset-16 rounded-full bg-[#FFF8EC] shadow-inner flex items-center justify-center"><!-- Food illustration -->
+         <div class="text-center">
+          <div class="text-8xl md:text-9xl">
+           🍱
+          </div>
+         </div>
+        </div><!-- Orbit badges -->
+        <div class="absolute top-0 right-4 bg-[#7AB85D] text-white px-4 py-2 rounded-2xl font-bold text-sm rotate-6 shadow-lg">
+         🌱 100% Fresh
+        </div>
+        <div class="absolute bottom-8 left-0 bg-[#E8572E] text-white px-4 py-2 rounded-2xl font-bold text-sm -rotate-6 shadow-lg">
+         😋 Kid-Approved
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- MARQUEE -->
+    <section class="bg-[#1F2A1D] text-[#FFF8EC] py-5 overflow-hidden border-y-4 border-[#E8572E]">
+     <div class="flex whitespace-nowrap ticker">
+      <div class="flex items-center gap-8 px-4 font-display font-800 text-2xl"><span>REAL INGREDIENTS</span><span class="text-[#E8572E]">✦</span> <span>NO SEED OILS</span><span class="text-[#E8572E]">✦</span> <span>LOCAL FARMS</span><span class="text-[#E8572E]">✦</span> <span>GLOBAL FLAVORS</span><span class="text-[#E8572E]">✦</span> <span>HAPPY KIDS</span><span class="text-[#E8572E]">✦</span> <span>REAL INGREDIENTS</span><span class="text-[#E8572E]">✦</span> <span>NO SEED OILS</span><span class="text-[#E8572E]">✦</span> <span>LOCAL FARMS</span><span class="text-[#E8572E]">✦</span> <span>GLOBAL FLAVORS</span><span class="text-[#E8572E]">✦</span> <span>HAPPY KIDS</span><span class="text-[#E8572E]">✦</span>
+      </div>
+     </div>
+    </section><!-- MISSION -->
+    <section id="mission" class="py-24 bg-[#FFF8EC]">
+     <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-5 gap-12 items-start">
+      <div class="md:col-span-2">
+       <div class="text-sm uppercase tracking-[0.3em] font-bold text-[#E8572E] mb-4">
+        Our Mission
+       </div>
+       <h2 id="mission-title" class="font-display font-900 text-4xl md:text-5xl leading-tight text-[#1F2A1D]">Mystery meat is canceled.</h2>
+       <div class="squiggle my-6 w-32"></div>
+      </div>
+      <p id="mission-text" class="md:col-span-3 text-lg text-[#1F2A1D]/80 leading-relaxed">For too long, American school lunches have been an afterthought — frozen, fried, and forgotten. Munchies is changing that. We partner with local farms, chef-driven kitchens, and nutritionists to deliver meals that fuel focus, build strong bodies, and introduce kids to the wide world of food. Because every student deserves a lunch break worth looking forward to.</p>
+     </div><!-- Pillars -->
+     <div class="max-w-7xl mx-auto px-6 mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="card-tilt bg-[#FFE9B8] p-8 rounded-3xl border-2 border-[#1F2A1D]">
+       <div class="w-14 h-14 rounded-2xl bg-[#E8572E] text-white flex items-center justify-center mb-4"><i data-lucide="leaf" class="w-7 h-7"></i>
+       </div>
+       <h3 class="font-display font-800 text-2xl mb-2">Fresh Daily</h3>
+       <p class="text-sm text-[#1F2A1D]/75">Prepared same-day in regional kitchens. No reheated freezer food — ever.</p>
+      </div>
+      <div class="card-tilt bg-[#D6EBC0] p-8 rounded-3xl border-2 border-[#1F2A1D]">
+       <div class="w-14 h-14 rounded-2xl bg-[#7AB85D] text-white flex items-center justify-center mb-4"><i data-lucide="heart-pulse" class="w-7 h-7"></i>
+       </div>
+       <h3 class="font-display font-800 text-2xl mb-2">Nutrient-Dense</h3>
+       <p class="text-sm text-[#1F2A1D]/75">Every meal is registered-dietitian approved and meets USDA standards.</p>
+      </div>
+      <div class="card-tilt bg-[#C9E3F0] p-8 rounded-3xl border-2 border-[#1F2A1D]">
+       <div class="w-14 h-14 rounded-2xl bg-[#2A7BB5] text-white flex items-center justify-center mb-4"><i data-lucide="globe" class="w-7 h-7"></i>
+       </div>
+       <h3 class="font-display font-800 text-2xl mb-2">Global Flavors</h3>
+       <p class="text-sm text-[#1F2A1D]/75">From teriyaki bowls to birria tacos — we open kids' palates to the world.</p>
+      </div>
+      <div class="card-tilt bg-[#FFD4C2] p-8 rounded-3xl border-2 border-[#1F2A1D]">
+       <div class="w-14 h-14 rounded-2xl bg-[#1F2A1D] text-white flex items-center justify-center mb-4"><i data-lucide="hand-coins" class="w-7 h-7"></i>
+       </div>
+       <h3 class="font-display font-800 text-2xl mb-2">Affordable</h3>
+       <p class="text-sm text-[#1F2A1D]/75">Fits district budgets. Compatible with NSLP and free/reduced programs.</p>
+      </div>
+     </div>
+    </section><!-- MENU -->
+    <section id="menu" class="py-24 bg-gradient-to-b from-[#FFF8EC] to-[#FFE9B8]">
+     <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+       <div class="text-sm uppercase tracking-[0.3em] font-bold text-[#E8572E] mb-4">
+        This Week on the Menu
+       </div>
+       <h2 class="font-display font-900 text-4xl md:text-5xl text-[#1F2A1D]">Food kids get <em class="text-[#E8572E]">hyped</em> about.</h2>
+      </div><!-- Featured dish -->
+      <div class="bg-[#1F2A1D] text-[#FFF8EC] rounded-[2.5rem] overflow-hidden shadow-2xl grid md:grid-cols-2 mb-10">
+       <div class="p-10 md:p-14 flex flex-col justify-center">
+        <div class="inline-flex self-start items-center gap-2 bg-[#E8572E] text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-5"><i data-lucide="flame" class="w-3.5 h-3.5"></i> Featured Dish
+        </div>
+        <h3 id="featured-dish-name" class="font-display font-900 text-4xl md:text-5xl mb-4 leading-tight">Teriyaki Rice Bowl</h3>
+        <p id="featured-dish-desc" class="text-[#FFF8EC]/80 text-lg mb-6 leading-relaxed">Glazed teriyaki chicken over fluffy jasmine rice, steamed broccoli, edamame, shredded carrots, and toasted sesame seeds. Made with house-reduced teriyaki sauce — no high-fructose corn syrup, no MSG.</p>
+        <div class="flex flex-wrap gap-2 mb-6"><span class="bg-[#FFF8EC]/10 px-3 py-1.5 rounded-full text-xs font-semibold">🍗 28g Protein</span> <span class="bg-[#FFF8EC]/10 px-3 py-1.5 rounded-full text-xs font-semibold">🥦 4 Veggies</span> <span class="bg-[#FFF8EC]/10 px-3 py-1.5 rounded-full text-xs font-semibold">🌾 Whole Grain</span> <span class="bg-[#FFF8EC]/10 px-3 py-1.5 rounded-full text-xs font-semibold">🥜 Nut-Free</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm">
+         <div>
+          <span class="font-display font-900 text-2xl text-[#FFCA6B]">520</span> cal
+         </div>
+         <div>
+          <span class="font-display font-900 text-2xl text-[#7AB85D]">A+</span> nutrition grade
+         </div>
+         <div>
+          <span class="font-display font-900 text-2xl text-[#E8572E]">★ 4.8</span> kid rating
+         </div>
+        </div>
+       </div>
+       <div class="relative bg-gradient-to-br from-[#FFCA6B] to-[#E8572E] p-10 flex items-center justify-center min-h-[320px]"><!-- Bowl illustration -->
+        <div class="relative w-72 h-72">
+         <div class="absolute inset-0 rounded-full bg-[#1F2A1D]/20 blur-2xl translate-y-6"></div>
+         <div class="absolute inset-0 rounded-full bg-gradient-to-b from-[#F5F1E4] to-[#D9CFB5] shadow-2xl"></div>
+         <div class="absolute inset-4 rounded-full bg-gradient-to-br from-[#E8D5A8] to-[#C9B178] flex items-center justify-center overflow-hidden"><!-- Rice base -->
+          <div class="absolute inset-6 rounded-full bg-[#FFF8EC]"></div><!-- Teriyaki chicken chunks -->
+          <div class="absolute top-8 left-10 w-14 h-10 bg-gradient-to-br from-[#8B4513] to-[#5C2E0C] rounded-xl rotate-12 shadow-md"></div>
+          <div class="absolute top-14 left-24 w-12 h-9 bg-gradient-to-br from-[#A0522D] to-[#6B3410] rounded-xl -rotate-6 shadow-md"></div>
+          <div class="absolute top-10 right-10 w-13 h-10 bg-gradient-to-br from-[#8B4513] to-[#5C2E0C] rounded-xl rotate-6 shadow-md"></div><!-- Broccoli -->
+          <div class="absolute bottom-12 left-8 text-3xl">
+           🥦
+          </div>
+          <div class="absolute bottom-20 right-12 text-2xl">
+           🥦
+          </div><!-- Edamame (green beans) -->
+          <div class="absolute bottom-8 right-24 w-8 h-3 bg-[#7AB85D] rounded-full"></div>
+          <div class="absolute bottom-10 right-28 w-8 h-3 bg-[#8BC86D] rounded-full rotate-12"></div>
+          <div class="absolute bottom-16 left-20 w-8 h-3 bg-[#7AB85D] rounded-full -rotate-12"></div><!-- Carrots -->
+          <div class="absolute top-20 left-16 w-10 h-2 bg-[#E8572E] rounded-full rotate-45"></div>
+          <div class="absolute bottom-14 left-24 w-10 h-2 bg-[#FF7043] rounded-full -rotate-12"></div>
+          <div class="absolute top-24 right-20 w-10 h-2 bg-[#E8572E] rounded-full rotate-12"></div><!-- Sesame seeds -->
+          <div class="absolute top-12 left-20 w-1.5 h-1.5 bg-[#FFF8E1] rounded-full"></div>
+          <div class="absolute top-18 left-28 w-1.5 h-1.5 bg-[#FFF8E1] rounded-full"></div>
+          <div class="absolute top-16 right-16 w-1.5 h-1.5 bg-[#FFF8E1] rounded-full"></div>
+          <div class="absolute bottom-24 left-16 w-1.5 h-1.5 bg-[#FFF8E1] rounded-full"></div>
+          <div class="absolute bottom-20 right-20 w-1.5 h-1.5 bg-[#FFF8E1] rounded-full"></div><!-- Steam -->
+          <div class="absolute -top-4 left-1/2 text-3xl opacity-60 floaty">
+           💨
+          </div>
+         </div><!-- Chopsticks -->
+         <div class="absolute -top-6 -right-10 w-40 h-1.5 bg-gradient-to-r from-[#D4A574] to-[#8B6F47] rounded-full rotate-45 shadow-lg"></div>
+         <div class="absolute -top-2 -right-10 w-40 h-1.5 bg-gradient-to-r from-[#D4A574] to-[#8B6F47] rounded-full rotate-45 shadow-lg"></div>
+        </div>
+       </div>
+      </div><!-- Menu grid -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+       <div class="card-tilt bg-[#FFF8EC] rounded-3xl border-2 border-[#1F2A1D] p-6">
+        <div class="text-5xl mb-3">
+         🌯
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider text-[#E8572E] mb-1">
+         Monday
+        </div>
+        <h4 class="font-display font-800 text-2xl mb-2">Birria Beef Wrap</h4>
+        <p class="text-sm text-[#1F2A1D]/70">Slow-braised beef, melted cheese, consommé dip, cilantro-lime rice.</p>
+       </div>
+       <div class="card-tilt bg-[#FFF8EC] rounded-3xl border-2 border-[#1F2A1D] p-6">
+        <div class="text-5xl mb-3">
+         🍝
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider text-[#E8572E] mb-1">
+         Tuesday
+        </div>
+        <h4 class="font-display font-800 text-2xl mb-2">Pesto Pasta Primavera</h4>
+        <p class="text-sm text-[#1F2A1D]/70">Whole-wheat rotini, basil pesto, zucchini, cherry tomatoes, parm.</p>
+       </div>
+       <div class="card-tilt bg-[#FFF8EC] rounded-3xl border-2 border-[#1F2A1D] p-6">
+        <div class="text-5xl mb-3">
+         🍚
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider text-[#E8572E] mb-1">
+         Wednesday
+        </div>
+        <h4 class="font-display font-800 text-2xl mb-2">Teriyaki Rice Bowl</h4>
+        <p class="text-sm text-[#1F2A1D]/70">Glazed chicken, jasmine rice, broccoli, edamame, sesame.</p>
+       </div>
+       <div class="card-tilt bg-[#FFF8EC] rounded-3xl border-2 border-[#1F2A1D] p-6">
+        <div class="text-5xl mb-3">
+         🥪
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider text-[#E8572E] mb-1">
+         Thursday
+        </div>
+        <h4 class="font-display font-800 text-2xl mb-2">Turkey Avocado Melt</h4>
+        <p class="text-sm text-[#1F2A1D]/70">Roast turkey, smashed avocado, provolone, sourdough, tomato soup.</p>
+       </div>
+       <div class="card-tilt bg-[#FFF8EC] rounded-3xl border-2 border-[#1F2A1D] p-6">
+        <div class="text-5xl mb-3">
+         🍕
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider text-[#E8572E] mb-1">
+         Friday
+        </div>
+        <h4 class="font-display font-800 text-2xl mb-2">Garden Flatbread</h4>
+        <p class="text-sm text-[#1F2A1D]/70">Crisp whole-grain crust, roasted veggies, mozzarella, fresh basil.</p>
+       </div>
+       <div class="card-tilt bg-gradient-to-br from-[#7AB85D] to-[#5A9240] text-white rounded-3xl border-2 border-[#1F2A1D] p-6 flex flex-col justify-center"><i data-lucide="salad" class="w-10 h-10 mb-3"></i>
+        <h4 class="font-display font-800 text-2xl mb-2">Daily Fresh Bar</h4>
+        <p class="text-sm opacity-90">Build-your-own salad &amp; fruit bar available every single day with 20+ local options.</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- HOW IT WORKS -->
+    <section id="how" class="py-24 bg-[#1F2A1D] text-[#FFF8EC] relative overflow-hidden">
+     <div class="absolute inset-0 dot-pattern opacity-10"></div>
+     <div class="relative max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+       <div class="text-sm uppercase tracking-[0.3em] font-bold text-[#FFCA6B] mb-4">
+        The Process
+       </div>
+       <h2 class="font-display font-900 text-4xl md:text-5xl">From farm to cafeteria in 4 steps.</h2>
+      </div>
+      <div class="grid md:grid-cols-4 gap-8">
+       <div class="relative">
+        <div class="font-display font-900 text-7xl text-[#E8572E] mb-2">
+         01
+        </div>
+        <h3 class="font-display font-800 text-xl mb-2">Source Local</h3>
+        <p class="text-sm text-[#FFF8EC]/70">Partner with 400+ regional farms within a 200-mile radius of each school.</p>
+       </div>
+       <div>
+        <div class="font-display font-900 text-7xl text-[#FFCA6B] mb-2">
+         02
+        </div>
+        <h3 class="font-display font-800 text-xl mb-2">Chef-Crafted</h3>
+        <p class="text-sm text-[#FFF8EC]/70">Our culinary team designs menus kids genuinely enjoy — tested with real students.</p>
+       </div>
+       <div>
+        <div class="font-display font-900 text-7xl text-[#7AB85D] mb-2">
+         03
+        </div>
+        <h3 class="font-display font-800 text-xl mb-2">Cook Fresh</h3>
+        <p class="text-sm text-[#FFF8EC]/70">Prepared every morning in regional kitchens using real, recognizable ingredients.</p>
+       </div>
+       <div>
+        <div class="font-display font-900 text-7xl text-[#6FC0E8] mb-2">
+         04
+        </div>
+        <h3 class="font-display font-800 text-xl mb-2">Deliver Hot</h3>
+        <p class="text-sm text-[#FFF8EC]/70">Insulated delivery to your cafeteria, ready to serve at perfect temperature.</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- TESTIMONIALS -->
+    <section class="py-24 bg-[#FFF8EC]">
+     <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+       <div class="text-sm uppercase tracking-[0.3em] font-bold text-[#E8572E] mb-4">
+        The Proof
+       </div>
+       <h2 class="font-display font-900 text-4xl md:text-5xl">People are talking.</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+       <div class="bg-[#FFE9B8] rounded-3xl p-8 border-2 border-[#1F2A1D]">
+        <div class="text-[#E8572E] text-3xl mb-3">
+         "
+        </div>
+        <p class="text-[#1F2A1D] mb-6 leading-relaxed">Our cafeteria went from "gross" to genuinely cool. Kids are eating more veggies than ever, and plate waste is down 60%.</p>
+        <div class="flex items-center gap-3">
+         <div class="w-12 h-12 rounded-full bg-[#E8572E] flex items-center justify-center text-white font-bold">
+          RM
+         </div>
+         <div>
+          <div class="font-bold text-sm">
+           Renee Martinez
+          </div>
+          <div class="text-xs text-[#1F2A1D]/60">
+           Principal, Lincoln Elementary (TX)
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-[#D6EBC0] rounded-3xl p-8 border-2 border-[#1F2A1D]">
+        <div class="text-[#7AB85D] text-3xl mb-3">
+         "
+        </div>
+        <p class="text-[#1F2A1D] mb-6 leading-relaxed">Finally, a lunch program I don't have to pack around. My son asks for the teriyaki bowl recipe at home now!</p>
+        <div class="flex items-center gap-3">
+         <div class="w-12 h-12 rounded-full bg-[#7AB85D] flex items-center justify-center text-white font-bold">
+          DJ
+         </div>
+         <div>
+          <div class="font-bold text-sm">
+           Derrick Johnson
+          </div>
+          <div class="text-xs text-[#1F2A1D]/60">
+           Parent, Oakridge Middle (CA)
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-[#C9E3F0] rounded-3xl p-8 border-2 border-[#1F2A1D]">
+        <div class="text-[#2A7BB5] text-3xl mb-3">
+         "
+        </div>
+        <p class="text-[#1F2A1D] mb-6 leading-relaxed">Munchies worked within our existing budget and meets every NSLP requirement. It's a no-brainer for any district.</p>
+        <div class="flex items-center gap-3">
+         <div class="w-12 h-12 rounded-full bg-[#2A7BB5] flex items-center justify-center text-white font-bold">
+          SK
+         </div>
+         <div>
+          <div class="font-bold text-sm">
+           Sarah Kwon
+          </div>
+          <div class="text-xs text-[#1F2A1D]/60">
+           Nutrition Director, Metro School District
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- CONTACT / CTA -->
+    <section id="contact" class="py-24 bg-gradient-to-br from-[#E8572E] via-[#FF7043] to-[#FFCA6B] relative overflow-hidden">
+     <div class="absolute top-10 left-10 text-6xl floaty opacity-50" style="--r: -12deg;">
+      🥗
+     </div>
+     <div class="absolute bottom-10 right-10 text-6xl floaty opacity-50" style="--r: 12deg; animation-delay: 1s;">
+      🍊
+     </div>
+     <div class="relative max-w-3xl mx-auto px-6 text-center">
+      <h2 class="font-display font-900 text-4xl md:text-6xl text-[#1F2A1D] leading-tight mb-4">Ready to upgrade lunch?</h2>
+      <p class="text-lg text-[#1F2A1D]/80 mb-10 max-w-xl mx-auto">Tell us about your school. We'll send a custom proposal and a tasting-kit within 48 hours.</p>
+      <form id="contact-form" class="bg-[#FFF8EC] rounded-3xl p-8 border-2 border-[#1F2A1D] shadow-2xl text-left space-y-5">
+       <div class="grid sm:grid-cols-2 gap-5">
+        <div><label for="name" class="block text-sm font-bold mb-2">Your name</label> <input id="name" type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-[#1F2A1D]/20 focus:border-[#E8572E] focus:outline-none bg-white">
+        </div>
+        <div><label for="email" class="block text-sm font-bold mb-2">Email</label> <input id="email" type="email" required class="w-full px-4 py-3 rounded-xl border-2 border-[#1F2A1D]/20 focus:border-[#E8572E] focus:outline-none bg-white">
+        </div>
+       </div>
+       <div class="grid sm:grid-cols-2 gap-5">
+        <div><label for="school" class="block text-sm font-bold mb-2">School / District</label> <input id="school" type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-[#1F2A1D]/20 focus:border-[#E8572E] focus:outline-none bg-white">
+        </div>
+        <div><label for="students" class="block text-sm font-bold mb-2"># of students</label> <input id="students" type="number" min="1" class="w-full px-4 py-3 rounded-xl border-2 border-[#1F2A1D]/20 focus:border-[#E8572E] focus:outline-none bg-white">
+        </div>
+       </div>
+       <div><label for="message" class="block text-sm font-bold mb-2">Tell us what you're looking for</label> <textarea id="message" rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-[#1F2A1D]/20 focus:border-[#E8572E] focus:outline-none bg-white resize-none"></textarea>
+       </div><button type="submit" class="btn-primary w-full py-4 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2"> Send My Tasting Kit <i data-lucide="send" class="w-5 h-5"></i> </button>
+       <div id="form-status" class="hidden text-center py-3 rounded-xl bg-[#7AB85D] text-white font-bold">
+        🎉 Thanks! We'll be in touch within 48 hours.
+       </div>
+      </form>
+     </div>
+    </section><!-- FOOTER -->
+    <footer class="bg-[#1F2A1D] text-[#FFF8EC] py-12">
+     <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+       <div class="flex items-center gap-3 mb-4">
+        <svg viewbox="0 0 60 60" class="w-10 h-10"><defs>
+          <clippath id="biteClip2">
+           <path d="M0 0 H60 V60 H0 Z M48 14 A8 8 0 0 1 48 30 A8 8 0 0 1 48 14 Z" />
+          </clippath>
+          <radialgradient id="earthGrad2" cx="30%" cy="30%">
+           <stop offset="0%" stop-color="#6FC0E8" />
+           <stop offset="100%" stop-color="#2A7BB5" />
+          </radialgradient>
+         </defs> <g clip-path="url(#biteClip2)">
+          <path d="M8 50 V14 C8 11 10 9 13 9 H16 L30 28 L44 9 H47 C50 9 52 11 52 14 V50 H44 V22 L32 38 H28 L16 22 V50 Z" fill="url(#earthGrad2)" stroke="#FFF8EC" stroke-width="1.5" stroke-linejoin="round" />
+          <path d="M12 20 Q16 18 18 22 Q16 26 13 24 Z" fill="#7AB85D" />
+          <path d="M36 18 Q40 16 44 20 Q42 24 38 23 Z" fill="#7AB85D" />
+          <path d="M45 35 Q48 33 49 38 Q47 42 44 40 Z" fill="#7AB85D" />
+         </g> <circle cx="54" cy="22" r="10" fill="#1F2A1D" />
+        </svg><span class="font-display font-900 text-2xl">Munchies</span>
+       </div>
+       <p class="text-sm text-[#FFF8EC]/70 max-w-sm">Feeding America's students the food they deserve — one fresh, flavor-packed tray at a time.</p>
+      </div>
+      <div>
+       <h4 class="font-bold uppercase text-xs tracking-widest mb-4 text-[#FFCA6B]">Company</h4>
+       <ul class="space-y-2 text-sm text-[#FFF8EC]/70">
+        <li><a href="#mission" class="hover:text-[#E8572E]">About</a></li>
+        <li><a href="#menu" class="hover:text-[#E8572E]">Menu</a></li>
+        <li><a href="#how" class="hover:text-[#E8572E]">How It Works</a></li>
+        <li><a href="#contact" class="hover:text-[#E8572E]">Partner</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-bold uppercase text-xs tracking-widest mb-4 text-[#FFCA6B]">Reach Us</h4>
+       <ul class="space-y-2 text-sm text-[#FFF8EC]/70">
+        <li>hello@munchies.school</li>
+        <li>1-800-MUNCHIE</li>
+        <li>Austin, TX · HQ</li>
+       </ul>
+      </div>
+     </div>
+     <div class="max-w-7xl mx-auto px-6 mt-10 pt-6 border-t border-[#FFF8EC]/10 text-xs text-[#FFF8EC]/50 flex flex-col sm:flex-row justify-between gap-2">
+      <div>
+       © 2025 Munchies Food Co. All rights reserved.
+      </div>
+      <div>
+       Made with 🌱 for the next generation.
+      </div>
+     </div>
+    </footer>
+   </main>
+  </div>
+  <script>
+  const defaultConfig = {
+    brand_name: "Munchies",
+    tagline: "Fresh. Real. Fuel.",
+    hero_title: "Lunch that actually tastes like lunch.",
+    hero_subtitle: "We're rebuilding school cafeterias across America with fresh, globally-inspired meals kids line up for and parents trust.",
+    cta_button: "Bring Munchies to Your School",
+    mission_title: "Mystery meat is canceled.",
+    mission_text: "For too long, American school lunches have been an afterthought — frozen, fried, and forgotten. Munchies is changing that. We partner with local farms, chef-driven kitchens, and nutritionists to deliver meals that fuel focus, build strong bodies, and introduce kids to the wide world of food. Because every student deserves a lunch break worth looking forward to.",
+    featured_dish_name: "Teriyaki Rice Bowl",
+    featured_dish_desc: "Glazed teriyaki chicken over fluffy jasmine rice, steamed broccoli, edamame, shredded carrots, and toasted sesame seeds. Made with house-reduced teriyaki sauce — no high-fructose corn syrup, no MSG."
+  };
 
-    <section style="background-color: lightgreen;">
-        <h2>Hobbies</h2>
-        <p>I like making beats, reading the Bible, watching TV, relaxing, and gaming.</p>
-    </section>
+  async function onConfigChange(config) {
+    const val = (k) => config[k] || defaultConfig[k];
+    document.getElementById('brand-name').textContent = val('brand_name');
+    document.getElementById('tagline-nav').textContent = val('tagline');
+    document.getElementById('hero-title').textContent = val('hero_title');
+    document.getElementById('hero-subtitle').textContent = val('hero_subtitle');
+    const cta = document.getElementById('cta-button');
+    // Preserve the arrow icon
+    cta.innerHTML = val('cta_button') + ' <i data-lucide="arrow-right" class="w-5 h-5"></i>';
+    document.getElementById('mission-title').textContent = val('mission_title');
+    document.getElementById('mission-text').textContent = val('mission_text');
+    document.getElementById('featured-dish-name').textContent = val('featured_dish_name');
+    document.getElementById('featured-dish-desc').textContent = val('featured_dish_desc');
+    if (window.lucide) lucide.createIcons();
+  }
 
-</body>
+  if (window.elementSdk) {
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ["brand_name", config.brand_name || defaultConfig.brand_name],
+        ["tagline", config.tagline || defaultConfig.tagline],
+        ["hero_title", config.hero_title || defaultConfig.hero_title],
+        ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle],
+        ["cta_button", config.cta_button || defaultConfig.cta_button],
+        ["mission_title", config.mission_title || defaultConfig.mission_title],
+        ["mission_text", config.mission_text || defaultConfig.mission_text],
+        ["featured_dish_name", config.featured_dish_name || defaultConfig.featured_dish_name],
+        ["featured_dish_desc", config.featured_dish_desc || defaultConfig.featured_dish_desc]
+      ])
+    });
+  }
+
+  // Form handling
+  document.getElementById('contact-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const status = document.getElementById('form-status');
+    status.classList.remove('hidden');
+    e.target.reset();
+    setTimeout(() => status.classList.add('hidden'), 4000);
+  });
+
+  // Init icons
+  lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f36075c0791df73',t:'MTc3NzM3ODkwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
